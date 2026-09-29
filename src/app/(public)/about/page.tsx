@@ -10,6 +10,8 @@ const LEADERSHIP_POSITIONS = [
   'Vice Secretary General',
   'Prayer Secretary',
   'Vice Prayer Secretary',
+  'Treasurer',
+  'Vice Treasurer',
   'Evangelism Secretary and Mission Director',
   'Vice Evangelism Secretary and Mission Director',
   'Media Director',

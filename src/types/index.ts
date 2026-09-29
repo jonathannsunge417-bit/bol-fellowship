@@ -81,6 +81,8 @@ export const POSITIONS = [
   'Vice Prayer Secretary',
   'Secretary General',
   'Vice Secretary General',
+  'Treasurer', 
+  'Vice Treasurer',
   'Evangelism Secretary and Mission Director',
   'Vice Evangelism Secretary and Mission Director',
   'Media Director',
