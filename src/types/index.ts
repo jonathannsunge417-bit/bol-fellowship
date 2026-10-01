@@ -105,4 +105,12 @@ export const POSITIONS = [
 
 export const CONDITIONS = ['Excellent', 'Good', 'Fair', 'Poor'] as const
 
-export const YEARS_OF_STUDY = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Postgraduate'] as const
+export const YEARS_OF_STUDY = [
+  '1st Year',
+  '2nd Year',
+  '3rd Year',
+  '4th Year',
+  '5th Year',
+  'Postgraduate',
+  'Non-Student',
+] as const

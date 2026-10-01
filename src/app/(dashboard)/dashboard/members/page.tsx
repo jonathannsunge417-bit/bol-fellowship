@@ -9,7 +9,7 @@ import autoTable from 'jspdf-autotable'
 
 const emptyForm = {
   full_name: '',
-  position: 'Member',
+  position: 'Members',
   hostel_name: '',
   room_number: '',
   year_of_study: '1st Year',
@@ -33,6 +33,7 @@ export default function MembersPage() {
   const [error, setError] = useState('')
 
   const supabase = createClient()
+  const isNonStudent = form.year_of_study === 'Non-Student'
 
   async function loadMembers() {
     setLoading(true)
@@ -62,7 +63,6 @@ export default function MembersPage() {
     const doc = new jsPDF()
     const pageWidth = doc.internal.pageSize.getWidth()
 
-    // Helper to load an image
     async function loadImage(src: string): Promise<string | null> {
       try {
         return await new Promise((resolve, reject) => {
@@ -89,21 +89,16 @@ export default function MembersPage() {
       }
     }
 
-    // Load logos separately
     const churchLogo = await loadImage('/logo.png')
     const kmuLogo = await loadImage('/kmu-logo.png')
 
-    // Church logo (left)
     if (churchLogo) {
       doc.addImage(churchLogo, 'PNG', 14, 8, 18, 18)
     }
-
-    // KMU logo (right)
     if (kmuLogo) {
       doc.addImage(kmuLogo, 'PNG', pageWidth - 32, 8, 18, 18)
     }
 
-    // Header text (centred)
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(15)
     doc.text('Bread of Life Campus Fellowship', pageWidth / 2, 15, { align: 'center' })
@@ -121,10 +116,9 @@ export default function MembersPage() {
     doc.text(`Generated on: ${new Date().toLocaleDateString()}`, pageWidth / 2, 36, { align: 'center' })
     doc.text(`Total members: ${filtered.length}`, pageWidth / 2, 41, { align: 'center' })
 
-    // Table
     autoTable(doc, {
       startY: 48,
-      head: [['#', 'Full Name', 'Position', 'Year', 'Hostel', 'Room', 'Contact', 'Email']],
+      head: [['#', 'Full Name', 'Position', 'Year', 'Hostel/Town', 'Room/House', 'Contact', 'Email']],
       body: filtered.map((m, i) => [
         i + 1,
         m.full_name,
@@ -295,8 +289,8 @@ export default function MembersPage() {
                 <th className="px-4 py-3 font-medium">Photo</th>
                 <th className="px-4 py-3 font-medium">Full Name</th>
                 <th className="px-4 py-3 font-medium">Position</th>
-                <th className="px-4 py-3 font-medium">Hostel</th>
-                <th className="px-4 py-3 font-medium">Room</th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">Hostel / Town</th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">Room / House</th>
                 <th className="px-4 py-3 font-medium">Year</th>
                 <th className="px-4 py-3 font-medium">Contact</th>
                 <th className="px-4 py-3 font-medium">Email</th>
@@ -377,27 +371,6 @@ export default function MembersPage() {
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Hostel Name *</label>
-                  <input
-                    required
-                    value={form.hostel_name}
-                    onChange={(e) => setForm({ ...form, hostel_name: e.target.value })}
-                    className="w-full rounded-lg border border-[var(--border)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Room Number *</label>
-                  <input
-                    required
-                    value={form.room_number}
-                    onChange={(e) => setForm({ ...form, room_number: e.target.value })}
-                    className="w-full rounded-lg border border-[var(--border)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)]"
-                  />
-                </div>
-              </div>
-
               <div>
                 <label className="block text-sm font-medium mb-1">Year of Study *</label>
                 <select
@@ -410,6 +383,34 @@ export default function MembersPage() {
                     <option key={y} value={y}>{y}</option>
                   ))}
                 </select>
+              </div>
+
+              {/* Dynamic fields */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {isNonStudent ? 'Town / Village *' : 'Hostel Name *'}
+                  </label>
+                  <input
+                    required
+                    value={form.hostel_name}
+                    onChange={(e) => setForm({ ...form, hostel_name: e.target.value })}
+                    placeholder={isNonStudent ? 'e.g. Kasama' : 'e.g. Hostel X'}
+                    className="w-full rounded-lg border border-[var(--border)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {isNonStudent ? 'House Number *' : 'Room Number *'}
+                  </label>
+                  <input
+                    required
+                    value={form.room_number}
+                    onChange={(e) => setForm({ ...form, room_number: e.target.value })}
+                    placeholder={isNonStudent ? 'e.g. House 12' : 'e.g. 105B'}
+                    className="w-full rounded-lg border border-[var(--border)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                  />
+                </div>
               </div>
 
               <div>

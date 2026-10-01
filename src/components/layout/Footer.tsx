@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Church, Mail, MapPin } from 'lucide-react'
+import { Church, Mail, MapPin, Phone } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -35,7 +35,21 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 shrink-0" />
-                info@bolcf-kmu.org
+                <a
+                  href="mailto:breadoflifecampusfellowship@gmail.com"
+                  className="hover:text-[var(--primary)]"
+                >
+                  breadoflifecampusfellowship@gmail.com
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 shrink-0" />
+                <a
+                  href="tel:+260961633540"
+                  className="hover:text-[var(--primary)]"
+                >
+                  0961 633 540
+                </a>
               </li>
             </ul>
           </div>
